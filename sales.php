@@ -6,13 +6,68 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>売上</title>
   <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* Custom styles for sales page */
+    .sales-page {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .filter-form {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .filter-form div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sales-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    .sales-table th, .sales-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .sales-table th {
+      background-color: #f4f4f4;
+    }
+
+    .btn-red {
+      display: inline-block;
+      padding: 10px 20px;
+      color: #fff;
+      background-color: #e74c3c;
+      text-decoration: none;
+      text-align: center;
+      border-radius: 5px;
+    }
+
+    .btn-red:hover {
+      background-color: #c0392b;
+    }
+  </style>
 </head>
 
 <body>
   <div class="sales-page">
     <h1>売上</h1>
 
-    <!-- Фильтр форм -->
+    <!-- Filter Form -->
     <form method="get" action="sales.php" class="filter-form">
       <div>
         <label for="date">日付で絞り込む:</label>
@@ -22,10 +77,10 @@
         <label for="month">月で絞り込む:</label>
         <input type="month" id="month" name="month" value="<?php echo htmlspecialchars($_GET['month'] ?? '', ENT_QUOTES); ?>" />
       </div>
-      <button type="submit">フィルタ</button>
+      <button type="submit" class="btn-red">検索</button>
     </form>
 
-    <!-- 売上データの表示 -->
+    <!-- Sales Data Table -->
     <form method="post" action="delete_sales.php">
       <table class="sales-table">
         <thead>
@@ -39,13 +94,11 @@
         </thead>
         <tbody>
           <?php
-          // Жишээ борлуулалтын өгөгдөл
           $sales = [
             ['id' => 1, 'date' => '2025-04-25', 'product' => '商品A', 'quantity' => 2, 'amount' => 2000],
             ['id' => 2, 'date' => '2025-04-24', 'product' => '商品B', 'quantity' => 1, 'amount' => 1000],
           ];
 
-          // Фильтр боловсруулах
           $dateFilter = $_GET['date'] ?? '';
           $monthFilter = $_GET['month'] ?? '';
 
@@ -59,7 +112,6 @@
             return true;
           });
 
-          // Борлуулалтын өгөгдлийг харуулах
           if (!empty($filteredSales)) {
             foreach ($filteredSales as $sale) {
               echo '<tr>';
@@ -83,7 +135,6 @@
   </div>
 
   <script>
-    // Бүх checkbox-ийг сонгох/цуцлах функц
     document.getElementById('select-all').addEventListener('change', function () {
       const checkboxes = document.querySelectorAll('input[name="delete_ids[]"]');
       checkboxes.forEach(checkbox => checkbox.checked = this.checked);

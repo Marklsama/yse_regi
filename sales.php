@@ -37,7 +37,8 @@
       margin-bottom: 20px;
     }
 
-    .sales-table th, .sales-table td {
+    .sales-table th,
+    .sales-table td {
       border: 1px solid #ddd;
       padding: 8px;
       text-align: center;
@@ -93,39 +94,18 @@
           </tr>
         </thead>
         <tbody>
-          <?php
-          $sales = [
-            ['id' => 1, 'date' => '2025-04-25', 'product' => '商品A', 'quantity' => 2, 'amount' => 2000],
-            ['id' => 2, 'date' => '2025-04-24', 'product' => '商品B', 'quantity' => 1, 'amount' => 1000],
-          ];
-
-          $dateFilter = $_GET['date'] ?? '';
-          $monthFilter = $_GET['month'] ?? '';
-
-          $filteredSales = array_filter($sales, function ($sale) use ($dateFilter, $monthFilter) {
-            if ($dateFilter && $sale['date'] !== $dateFilter) {
-              return false;
-            }
-            if ($monthFilter && strpos($sale['date'], $monthFilter) !== 0) {
-              return false;
-            }
-            return true;
-          });
-
-          if (!empty($filteredSales)) {
-            foreach ($filteredSales as $sale) {
-              echo '<tr>';
-              echo '<td><input type="checkbox" name="delete_ids[]" value="' . htmlspecialchars($sale['id'], ENT_QUOTES) . '" /></td>';
-              echo '<td>' . htmlspecialchars($sale['date'], ENT_QUOTES) . '</td>';
-              echo '<td>' . htmlspecialchars($sale['product'], ENT_QUOTES) . '</td>';
-              echo '<td>' . htmlspecialchars($sale['quantity'], ENT_QUOTES) . '</td>';
-              echo '<td>' . htmlspecialchars($sale['amount'], ENT_QUOTES) . '円</td>';
-              echo '</tr>';
-            }
-          } else {
-            echo '<tr><td colspan="5">該当する売上データがありません。</td></tr>';
-          }
-          ?>
+          <?php if (!empty($sales)): ?>
+            <?php foreach ($sales as $sale): ?>
+              <tr>
+                <td><input type="checkbox" name="delete_ids[]" value="<?= htmlspecialchars($sale['id'], ENT_QUOTES) ?>" /></td>
+                <td><?= htmlspecialchars($sale['sale_at'], ENT_QUOTES) ?></td>
+                <td><?= htmlspecialchars($sale['receipt_no'], ENT_QUOTES) ?></td>
+                <td><?= htmlspecialchars($sale['amount'], ENT_QUOTES) ?>円</td>
+              </tr>
+            <?php endforeach; ?>
+          <?php else: ?>
+            <tr><td colspan="5">該当する売上データがありません。</td></tr>
+          <?php endif; ?>
         </tbody>
       </table>
       <button type="submit" class="btn-red">選択したデータを削除</button>

@@ -45,7 +45,7 @@
     }
 
     .sales-table th {
-      background-color: #f4f4f4;
+      background-color: #e74c3c;
     }
 
     .btn-red {

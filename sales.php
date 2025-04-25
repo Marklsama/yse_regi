@@ -61,31 +61,6 @@
     .btn-red:hover {
       background-color: #c0392b;
     }
-
-    .sales-form {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.sales-form div {
-  display: flex;
-  flex-direction: column;
-}
-
-.sales-form label {
-  font-weight: bold;
-}
-
-.sales-form input {
-  padding: 8px;
-  font-size: 14px;
-}
-
-.sales-form button {
-  align-self: flex-start;
-}
   </style>
 </head>
 
@@ -105,21 +80,7 @@
       </div>
       <button type="submit" class="btn-red">検索</button>
     </form>
-    <form method="post" action="save_sales.php" class="sales-form">
-  <div>
-    <label for="sale_at">日付:</label>
-    <input type="datetime-local" id="sale_at" name="sale_at" required />
-  </div>
-  <div>
-    <label for="amount">金額:</label>
-    <input type="number" id="amount" name="amount" required />
-  </div>
-  <div>
-    <label for="receipt_no">領収書番号:</label>
-    <input type="text" id="receipt_no" name="receipt_no" required />
-  </div>
-  <button type="submit" class="btn-red">計上</button>
-</form>
+
     <!-- Sales Data Table -->
     <form method="post" action="delete_sales.php">
       <table class="sales-table">

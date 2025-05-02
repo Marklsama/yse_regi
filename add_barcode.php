@@ -1,4 +1,5 @@
 <?php
+require_once 'db.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $barcode = $_POST['barcode'] ?? '';
     $product = $_POST['product'] ?? '';

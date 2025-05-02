@@ -1,4 +1,5 @@
 <?php
+require_once 'db.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $deleteIds = $_POST['delete_ids'] ?? [];
 

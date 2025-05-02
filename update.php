@@ -1,5 +1,6 @@
 <?php
-require_once 'db.php';
+require_once 'db.php'; // Өгөгдлийн сантай холбох
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $submitType = $_POST['submit_type'] ?? '';
 
@@ -15,12 +16,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
 
         case 'commit':
-            // 計上の処理
+            $productName = $_POST['product_name'] ?? '';
             $price = $_POST['price'] ?? '';
-            if (!empty($price)) {
-                echo "金額: " . htmlspecialchars($price, ENT_QUOTES) . " を計上しました。";
+            if (!empty($productName) && !empty($price) && is_numeric($price)) {
+                try {
+                    $stmt = $pdo->prepare("INSERT INTO commits (product_name, price) VALUES (:product_name, :price)");
+                    $stmt->execute([
+                        ':product_name' => $productName,
+                        ':price' => $price
+                    ]);
+
+                    // Амжилттай нэмсэн мессежтэйгээр буцах
+                    header('Location: commit.php?success=1');
+                    exit;
+                } catch (PDOException $e) {
+                    echo '<div style="text-align: center; margin-top: 50px;">';
+                    echo '<h2>データベースエラー: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES) . '</h2>';
+                    echo '</div>';
+                }
             } else {
-                echo "金額が入力されていません。";
+                header('Location: commit.php?error=1');
+                exit;
             }
             break;
 

@@ -1,3 +1,10 @@
+<?php
+// Өгөгдлийн сангаас баркодын өгөгдлийг авах
+require_once 'db.php';
+$stmt = $pdo->query("SELECT * FROM barcodes ORDER BY created_at DESC");
+$barcodes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -11,6 +18,12 @@
 <body>
   <div class="sales-page">
     <h1>バーコード入力</h1>
+
+    <?php if (isset($_GET['success'])): ?>
+      <div style="text-align: center; color: green; margin-top: 20px;">
+        <strong>バーコードデータが正常に追加されました。</strong>
+      </div>
+    <?php endif; ?>
 
     <!-- Баркод оруулах хэсэг -->
     <form method="post" action="add_barcode.php" class="barcode-form">
@@ -33,12 +46,6 @@
         </thead>
         <tbody>
           <?php
-          // Жишээ баркодын өгөгдөл
-          $barcodes = [
-  
-          ];
-
-          // Баркодын өгөгдлийг харуулах
           if (!empty($barcodes)) {
             foreach ($barcodes as $barcode) {
               echo '<tr>';

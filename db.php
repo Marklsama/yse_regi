@@ -1,7 +1,6 @@
 <?php
-require_once 'db.php';
 $host = 'localhost';
-$dbname = 'yse_regi'; // Чиний өгөгдлийн сангийн нэр
+$dbname = 'yse_regi'; // Өгөгдлийн сангийн нэр
 $username = 'root';
 $password = 'root';
 

@@ -1,3 +1,11 @@
+<?php
+require_once 'db.php'; // Өгөгдлийн сантай холбох
+
+// Борлуулалтын өгөгдлийг авах
+$stmt = $pdo->query("SELECT * FROM sales_items ORDER BY sale_date DESC");
+$salesItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -74,42 +82,36 @@
         <label for="date">日付で絞り込む:</label>
         <input type="date" id="date" name="date" value="<?php echo htmlspecialchars($_GET['date'] ?? '', ENT_QUOTES); ?>" />
       </div>
-      <div>
-        <label for="month">月で絞り込む:</label>
-        <input type="month" id="month" name="month" value="<?php echo htmlspecialchars($_GET['month'] ?? '', ENT_QUOTES); ?>" />
-      </div>
       <button type="submit" class="btn-red">検索</button>
     </form>
 
     <!-- Sales Data Table -->
-    <form method="post" action="delete_sales.php">
-      <table class="sales-table">
-        <thead>
-          <tr>
-            <th><input type="checkbox" id="select-all" /></th>
-            <th>日付</th>
-            <th>商品名</th>
-            <th>数量</th>
-            <th>金額</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php if (!empty($sales)): ?>
-            <?php foreach ($sales as $sale): ?>
-              <tr>
-                <td><input type="checkbox" name="delete_ids[]" value="<?= htmlspecialchars($sale['id'], ENT_QUOTES) ?>" /></td>
-                <td><?= htmlspecialchars($sale['sale_at'], ENT_QUOTES) ?></td>
-                <td><?= htmlspecialchars($sale['receipt_no'], ENT_QUOTES) ?></td>
-                <td><?= htmlspecialchars($sale['amount'], ENT_QUOTES) ?>円</td>
-              </tr>
-            <?php endforeach; ?>
-          <?php else: ?>
-            <tr><td colspan="5">該当する売上データがありません。</td></tr>
-          <?php endif; ?>
-        </tbody>
-      </table>
-      <button type="submit" class="btn-red">選択したデータを削除</button>
-    </form>
+    <table class="sales-table">
+      <thead>
+        <tr>
+          <th>日付</th>
+          <th>商品名</th>
+          <th>数量</th>
+          <th>金額</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php
+        if (!empty($salesItems)) {
+            foreach ($salesItems as $item) {
+                echo '<tr>';
+                echo '<td>' . htmlspecialchars($item['sale_date'], ENT_QUOTES) . '</td>';
+                echo '<td>' . htmlspecialchars($item['product_name'], ENT_QUOTES) . '</td>';
+                echo '<td>' . htmlspecialchars($item['quantity'], ENT_QUOTES) . '</td>';
+                echo '<td>' . htmlspecialchars($item['amount'], ENT_QUOTES) . '</td>';
+                echo '</tr>';
+            }
+        } else {
+            echo '<tr><td colspan="4">データがありません。</td></tr>';
+        }
+        ?>
+      </tbody>
+    </table>
 
     <a href="index.php" class="btn-red">戻る</a>
   </div>

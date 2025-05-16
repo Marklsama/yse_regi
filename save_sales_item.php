@@ -1,5 +1,5 @@
 <?php
-require 'db.php'; // Өгөгдлийн сантай холбох
+require_once 'db.php'; // Өгөгдлийн сантай холбох
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $saleDate = $_POST['sale_date'] ?? null;
@@ -14,21 +14,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':sale_date' => $saleDate,
                 ':product_name' => $productName,
                 ':quantity' => $quantity,
-                ':amount' => $amount,
+                ':amount' => $amount
             ]);
 
-            echo '<div style="text-align: center; margin-top: 50px;">';
-            echo '<h2>データが正常に保存されました。</h2>';
-            echo '<a href="index.php" class="btn-red" style="display: inline-block; margin-top: 20px; padding: 10px 20px; font-size: 16px; color: #fff; background-color: #007bff; text-decoration: none; border-radius: 5px;">戻る</a>';
-            echo '</div>';
+            header('Location: sales.php?success=1');
+            exit;
         } catch (PDOException $e) {
-            die("データ保存中にエラーが発生しました: " . $e->getMessage());
+            echo '<div style="text-align: center; margin-top: 50px;">';
+            echo '<h2>データベースエラー: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES) . '</h2>';
+            echo '</div>';
         }
     } else {
-        echo '<div style="text-align: center; margin-top: 50px;">';
-        echo '<h2>すべてのフィールドを入力してください。</h2>';
-        echo '<a href="index.php" class="btn-red" style="display: inline-block; margin-top: 20px; padding: 10px 20px; font-size: 16px; color: #fff; background-color: #007bff; text-decoration: none; border-radius: 5px;">戻る</a>';
-        echo '</div>';
+        header('Location: sales.php?error=1');
+        exit;
     }
 }
 ?>

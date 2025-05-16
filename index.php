@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,7 +12,7 @@
   <div class="calculator">
     <form action="update.php" method="post">
       <!-- Дэлгэц дээрх тоог харуулах хэсэг -->
-      <input type="text" id="display" name="price" class="display" readonly />
+      <textarea id="display" name="price" class="display" readonly></textarea>
 
       <div class="buttons">
         <!-- Тооны болон үйлдлийн 20 товчлуурууд -->

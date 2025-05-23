@@ -39,11 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <div class="main-container">
     <div class="big-title">計上</div>
     <div class="flex-container">
-      <!-- Тооны машин (index.php шиг харагдуулсан) -->
+      <!-- Тооны машин -->
       <div class="calc-panel">
         <input type="text" id="calc-display" class="display" value="0" readonly>
         <div class="buttons">
-          <!-- Тооны машин товчлуурууд -->
           <button onclick="calcInput('7')" type="button">7</button>
           <button onclick="calcInput('8')" type="button">8</button>
           <button onclick="calcInput('9')" type="button">9</button>
@@ -105,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // barcodeItems массивыг хамгийн эхэнд зарлана
     const barcodeItems = <?= json_encode($barcodeItems, JSON_UNESCAPED_UNICODE) ?>;
 
-    // Калькуляторын логик (бүтэн тоо болон бутархай дэмжинэ)
+    // Калькуляторын логик
     let calcValue = "";
     let calcBuffer = "";
     let calcOperator = "";
@@ -170,13 +169,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       document.getElementById('calc-display').value = "0";
     }
 
+    function addTax() {
+      if (calcValue !== "") {
+        let taxed = Math.round(parseFloat(calcValue) * 1.1);
+        calcValue = String(taxed);
+        document.getElementById('calc-display').value = calcValue;
+      }
+    }
+
     // Сагсны логик
     let cart = [];
     function addToCart() {
-      let price = parseInt(calcValue, 10);
+      let price = parseFloat(calcValue);
       if (!price || price <= 0) return;
 
-      let matchedProducts = barcodeItems.filter(item => parseInt(item.price, 10) === price);
+      // Бүх барааны татваргүй үнийн жагсаалт (float-р шалгана)
+      let matchedProducts = barcodeItems.filter(item => Math.abs(parseFloat(item.price) - price) < 0.01);
 
       if (matchedProducts.length === 0) {
         let name = "未登録商品";
@@ -187,9 +195,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         renderCart();
       } else if (matchedProducts.length === 1) {
         let name = matchedProducts[0].product;
-        let found = cart.find(item => item.price === price && item.name === name);
+        // Хэрэглэгч татваргүй үнэ оруулсан бол tax нэмнэ, татвартай үнийг дахин tax-дахгүй
+        let basePrice = parseFloat(matchedProducts[0].price);
+        let taxedPrice = Math.round(basePrice * 1.1);
+        let finalPrice = (Math.abs(price - basePrice) < 0.01) ? taxedPrice : price;
+        let found = cart.find(item => item.price === finalPrice && item.name === name);
         if (found) found.qty++;
-        else cart.push({ price, qty: 1, name });
+        else cart.push({ price: finalPrice, qty: 1, name });
         calcClear();
         renderCart();
       } else {
@@ -207,9 +219,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     function selectProductForCart(productName, price) {
-      let found = cart.find(item => item.price === price && item.name === productName);
+      // Барааны татваргүй үнийг олж, хэрэглэгч татваргүй үнэ оруулсан бол tax нэмнэ
+      let product = barcodeItems.find(item => item.product === productName);
+      let basePrice = product ? parseFloat(product.price) : price;
+      let taxedPrice = Math.round(basePrice * 1.1);
+      let finalPrice = (Math.abs(price - basePrice) < 0.01) ? taxedPrice : price;
+      let found = cart.find(item => item.price === finalPrice && item.name === productName);
       if (found) found.qty++;
-      else cart.push({ price, qty: 1, name: productName });
+      else cart.push({ price: finalPrice, qty: 1, name: productName });
       calcClear();
       renderCart();
       closeProductModal();
@@ -310,9 +327,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     renderCart();
 
+    window.addEventListener('DOMContentLoaded', function() {
+  // input дээр focus авах үед автоматаар blur болгоно
+  document.getElementById('calc-display').addEventListener('focus', function(e) {
+    e.target.blur();
+  });
+});
+
     // Тооны машинд keyboard-оор удирдах event listener нэмэх
-    document.addEventListener('keydown', function(e) {
-      // Тоо оруулах
+    window.addEventListener('keydown', function(e) {
       if (e.key >= '0' && e.key <= '9') {
         if (calcValue === "0") calcValue = "";
         calcInput(e.key);

@@ -1,3 +1,29 @@
+<?php
+require_once 'db.php';
+
+// Бараа нэмэх
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
+    $barcode = $_POST['barcode'] ?? '';
+    $product = $_POST['product'] ?? '';
+    $price = $_POST['price'] ?? 0;
+    $stock = $_POST['stock'] ?? 0;
+    if ($barcode && $product) {
+        $stmt = $pdo->prepare("INSERT INTO products (barcode, product, price, stock) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$barcode, $product, $price, $stock]);
+        header("Location: manage.php?success=1");
+        exit;
+    }
+}
+
+// Бүх барааны жагсаалт
+$products = [];
+try {
+    $stmt = $pdo->query("SELECT * FROM products ORDER BY id DESC");
+    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    // products хүснэгт байхгүй бол алдаа гарна
+}
+?>
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -72,6 +98,53 @@
         ?>
       </tbody>
     </table>
+
+    <h2>商品管理</h2>
+    <?php if (isset($_GET['success'])): ?>
+      <div style="color:#4caf50;text-align:center;margin-bottom:1rem;">商品が追加されました。</div>
+    <?php endif; ?>
+
+    <!-- Шинэ бараа нэмэх форм -->
+    <form method="post" class="barcode-form" style="margin-bottom:2rem;">
+      <input type="hidden" name="add_product" value="1">
+      <input type="text" name="barcode" placeholder="バーコード" class="barcode-input" required>
+      <input type="text" name="product" placeholder="商品名" class="barcode-input" required>
+      <input type="number" name="price" placeholder="金額" class="barcode-input" min="0" required>
+      <input type="number" name="stock" placeholder="在庫数" class="barcode-input" min="0" required>
+      <button type="submit" class="btn-red">商品を追加</button>
+    </form>
+
+    <!-- Бүх барааны жагсаалт -->
+    <table class="sales-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>バーコード</th>
+          <th>商品名</th>
+          <th>金額</th>
+          <th>在庫数</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php if (!empty($products)): ?>
+          <?php foreach ($products as $row): ?>
+            <tr>
+              <td><?= htmlspecialchars($row['id']) ?></td>
+              <td><?= htmlspecialchars($row['barcode']) ?></td>
+              <td><?= htmlspecialchars($row['product']) ?></td>
+              <td><?= htmlspecialchars($row['price']) ?>円</td>
+              <td><?= htmlspecialchars($row['stock']) ?></td>
+            </tr>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <tr><td colspan="5">商品データがありません。</td></tr>
+        <?php endif; ?>
+      </tbody>
+    </table>
+
+    <div class="actions" style="margin-top:2rem;">
+      <a href="index.php" class="btn-red">レジ画面へ戻る</a>
+    </div>
   </div>
 </body>
 

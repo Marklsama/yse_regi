@@ -1,0 +1,221 @@
+/* commit.css */
+
+body, html {
+  min-height: 100vh;
+  height: 100%;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(ellipse at center, #23242a 0%, #181820 100%);
+}
+.main-container {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  /* background: none; */
+  /* box-shadow: none; */
+  /* border-radius: 0; */
+}
+
+.flex-container {
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+  justify-content: center; /* Төвд зэрэгцүүлнэ */
+  flex-wrap: nowrap;
+}
+
+.calc-panel {
+  background: #222;
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 320px;
+  margin: 0 auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.cart-panel {
+  width: 360px;
+  min-width: 320px;
+  max-width: 400px;
+  flex-shrink: 0;
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem 1.5rem;
+  color: #222;
+  box-shadow: 0 4px 24px #0001;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.display, .mini-display {
+  width: 100%;
+  font-size: 2.2rem;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 0.8rem;
+  margin-bottom: 1rem;
+  text-align: right;
+  letter-spacing: 2px;
+}
+
+.buttons, .mini-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.buttons button, .mini-buttons button {
+  font-size: 1.3rem;
+  padding: 0.8rem 0;
+  border-radius: 6px;
+  border: none;
+  background: #333;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.buttons button:active, .mini-buttons button:active {
+  background: #444;
+}
+
+.cart-title {
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #1976d2;
+  font-size: 1.2rem;
+}
+
+.cart-list {
+  margin-bottom: 1.2rem;
+  width: 100%;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.7rem;
+  background: #f7f7fa;
+  border-radius: 7px;
+  padding: 0.5rem 0.7rem;
+  box-shadow: 0 1px 4px #0001;
+}
+
+.cart-item-label {
+  font-size: 1.1em;
+  font-weight: bold;
+  min-width: 60px;
+}
+
+.cart-item .qty-btn,
+.cart-item .del-btn {
+  padding: 0.2rem 0.7rem;
+  font-size: 1.1rem;
+  border-radius: 5px;
+  border: none;
+  margin-left: 0.2rem;
+}
+
+.cart-item .qty-btn {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.cart-item .qty-btn:hover {
+  background: #bbdefb;
+}
+
+.cart-item .del-btn {
+  background: #ff5252;
+  color: #fff;
+}
+
+.cart-item .del-btn:hover {
+  background: #b71c1c;
+}
+
+.cart-subtotal {
+  font-size: 0.9em;
+  color: #888;
+  min-width: 60px;
+}
+
+.cart-total {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin: 1rem 0;
+  color: #1976d2;
+}
+
+.cart-total-unit {
+  font-size: 1rem;
+  color: #888;
+  margin-left: 0.3em;
+}
+
+.cart-question {
+  margin: 1rem 0 0.5rem 0;
+}
+
+.btn-main {
+  background: #e74c3c;
+  color: #fff;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  border: none;
+  padding: 0.8rem 0;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+  box-shadow: 0 2px 8px #0002;
+}
+.btn-main:hover {
+  background: #1976d2;
+}
+
+.btn-red {
+  background: #c0392b;
+  color: #fff;
+}
+
+.btn-green {
+  background: #27ae60;
+  color: #fff;
+}
+.btn-green:hover {
+  background: #2e7031;
+}
+
+.btn-gray {
+  background: #888;
+  color: #fff;
+}
+.btn-gray:hover {
+  background: #424242;
+}
+
+@media (max-width: 900px) {
+  .flex-container {
+    flex-direction: column;
+    gap: 1.5rem;
+    justify-content: flex-start;
+  }
+  .calc-panel, .cart-panel {
+    width: 100%;
+    min-width: 0;
+    padding: 1rem;
+    margin-left: 0;
+    max-width: 100%;
+  }
+}
+@media (max-width: 600px) {
+  .calc-panel { width: 100%; }
+}

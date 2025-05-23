@@ -5,11 +5,13 @@ let hasDot = false;
 
 function updateDisplay(value = null) {
     const display = document.getElementById("display");
-    display.value = value !== null ? value : current || "0";
+    if (display) {
+        display.value = value !== null ? value : current || "0";
+    }
 }
 
 function handleClick(value, event) {
-    event.preventDefault();
+    if (event) event.preventDefault();
     if (!isNaN(value) || value === "00") {
         current += value;
     } else if (value === ".") {
@@ -27,7 +29,7 @@ function handleClick(value, event) {
             total = parseFloat(current);
             current = "";
             operator = value;
-            hasDot = false; // 小数点フラグをリセット
+            hasDot = false;
         }
     } else if (value === "=") {
         if (current && operator !== null) {
@@ -37,7 +39,7 @@ function handleClick(value, event) {
             if (operator === "×") total *= right;
             if (operator === "/") {
                 if (right === 0) {
-                    current = "Error"; // ゼロ除算エラー
+                    current = "Error";
                 } else {
                     total /= right;
                 }
@@ -48,7 +50,7 @@ function handleClick(value, event) {
     } else if (value === "Tax") {
         if (current) {
             current = (parseFloat(current) * 1.1).toFixed(2);
-            total = parseFloat(current); // 合計を更新
+            total = parseFloat(current);
         }
     } else if (value === "DEL") {
         current = current.slice(0, -1);
@@ -56,13 +58,11 @@ function handleClick(value, event) {
     updateDisplay();
 }
 
+// Зөвхөн калькуляторын display дээр фокус байх үед л keydown үйлдэл хийх
 document.addEventListener("keydown", function (event) {
     const activeElement = document.activeElement;
-
-    // Зөвхөн калькуляторын display дээр фокус байх үед л калькуляторын үйлдэл хийх
     if (activeElement && activeElement.id === "display") {
         event.preventDefault();
-
         const key = event.key;
         if (!isNaN(key)) handleClick(key, event);
         else if (key === "+") handleClick("+", event);
@@ -74,5 +74,4 @@ document.addEventListener("keydown", function (event) {
         else if (key === ".") handleClick(".", event);
         else if (key === "Backspace") handleClick("DEL", event);
     }
-    // Бусад input, textarea дээр ямар ч үйлдэл хийхгүй (event.preventDefault() хийхгүй)
 });

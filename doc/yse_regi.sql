@@ -18,21 +18,10 @@ CREATE TABLE barcodes (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,     -- レコード作成日時
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP  -- レコード更新日時
 );
-
--- sales хүснэгт
-CREATE TABLE sales (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,             -- 売上データの一意の識別子（主キー）
-    sale_at DATE NOT NULL,                             -- 売上日
-    amount DECIMAL(10, 2) NOT NULL,                    -- 売上金額
-    receipt_no VARCHAR(255) NOT NULL,                 -- レシート番号
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,     -- レコード作成日時
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP  -- レコード更新日時
-);
-
--- commits хүснэгт
-CREATE TABLE commits (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,             -- 計上データの一意の識別子（主キー）
-    price DECIMAL(10, 2) NOT NULL,                    -- 金額
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,     -- レコード作成日時
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP  -- レコード更新日時
-);
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `role` varchar(50) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
